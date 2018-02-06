@@ -18,9 +18,11 @@ button {
   padding: 0.5rem 2rem;
 }
 
-h3 {
+h1 {
   font-family: 'Work Sans', sans-serif;
-  font-weight: 800;
+  font-weight: 300;
+  font-size: 1.5rem;
+  letter-spacing: 2px;
 }
 
 img {
