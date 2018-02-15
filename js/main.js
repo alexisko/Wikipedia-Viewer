@@ -2,8 +2,7 @@ var input = document.getElementById('input');
 
 // CHECK IF USER PRESSES ENTER
 $(document).keypress(function(e) {
-  var keycode = e.key;
-  if (keycode === 'Enter') {
+  if (e.key === 'Enter') {
     getResults(input.value);
   }
 });
@@ -20,6 +19,7 @@ $('#random').click(function() {
 
 // AJAX CALL
 function getResults(input) {
+  removeOldResults();
   var term = input.split(' ').join('+');
   $.ajax({
         type: 'GET',
@@ -35,17 +35,24 @@ function getResults(input) {
       });
 }
 
+function removeOldResults() {
+  var results = document.getElementById("results-container");
+  while(results.firstChild) {
+    results.removeChild(results.firstChild);
+  }
+}
+
 function displayResults(data) {
   console.log(data);
   var results = data.query.search;
   if(results.length > 0) {
-    for(var i = 0; i < 3; i++) {
-      var title = '<div><a href="https://en.wikipedia.org/wiki/' +
+    for(var i = 0; i < results.length; i++) {
+      var title = '<div class="result-title"><a href="https://en.wikipedia.org/wiki/' +
       results[i].title + '" target="_blank">' + results[i].title +
       '</a></div>';
-      var body = '';
+      var body = '<div class="result-content">' + results[i].snippet + '...' + '</div>';
 
-      $('.results').append('<div>' + title + '</div>');
+      $('#results-container').append('<div class="result come-in">' + title + body + '</div>');
     }
   }
 

@@ -29,6 +29,10 @@ img {
   max-width: 15%;
 }
 
+@keyframes come-in {
+  to { transform: translateY(0); }
+}
+
 @keyframes rainbow {
   0%   { background-color: #c0392b; }
   14%  { background-color: #e67e22; }
@@ -49,6 +53,16 @@ img {
   flex-direction: column;
   align-items: center;
   margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.come-in {
+  transform: translateY(100px);
+  animation: come-in 0.8s ease forwards;
+}
+
+.come-in:nth-child(odd) {
+  animation-duration: 0.6s; /* So they look staggered */
 }
 
 #input {
@@ -63,4 +77,26 @@ img {
 
 #random:hover {
   animation:rainbow 1s infinite;
+}
+
+.result {
+  background-color: white;
+  box-shadow: 0 8px 6px -6px #888;
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 300;
+  margin: 0.5rem;
+  padding: 1rem;
+  width: 450px;
+}
+
+.result-title {
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+#results-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
