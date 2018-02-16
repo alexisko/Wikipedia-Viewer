@@ -1,41 +1,39 @@
 var input = document.getElementById('input');
 
-// CHECK IF USER PRESSES ENTER
 $(document).keypress(function(e) {
   if (e.key === 'Enter') {
-    getResults(input.value);
+    search(input.value);
   }
 });
 
-// USER PRESSED SEARCH BTN
 $('#search').click(function() {
-  getResults(input.value);
+  search(input.value);
 });
 
-// RANDOM BTN
 $('#random').click(function() {
   window.open("https://en.wikipedia.org/wiki/Special:Random");
 });
 
-// AJAX CALL
-function getResults(input) {
-  removeOldResults();
-  var term = input.split(' ').join('+');
-  $.ajax({
-        type: 'GET',
-        url: 'https://en.wikipedia.org/w/api.php?',
-        data: {
-          action: 'query',
-          list: 'search',
-          srsearch: term,
-          format: 'json'
-        },
-        dataType: 'jsonp',
-        success: displayResults
-      });
+function search(input) {
+  if(input.length > 0) {
+    clearResults();
+
+    $.ajax({
+      type: 'GET',
+      url: 'https://en.wikipedia.org/w/api.php?',
+      data: {
+        action: 'query',
+        list: 'search',
+        srsearch: input.split(' ').join('+'),
+        format: 'json'
+      },
+      dataType: 'jsonp',
+      success: displayResults
+    });
+  }
 }
 
-function removeOldResults() {
+function clearResults() {
   var results = document.getElementById("results-container");
   while(results.firstChild) {
     results.removeChild(results.firstChild);
@@ -43,10 +41,9 @@ function removeOldResults() {
 }
 
 function displayResults(data) {
-  console.log(data);
   var results = data.query.search;
   if(results.length > 0) {
-    for(var i = 0; i < results.length; i++) {
+    for(var i = 0; i < 5; i++) {
       var title = '<div class="result-title"><a href="https://en.wikipedia.org/wiki/' +
       results[i].title + '" target="_blank">' + results[i].title +
       '</a></div>';
@@ -54,6 +51,11 @@ function displayResults(data) {
 
       $('#results-container').append('<div class="result come-in">' + title + body + '</div>');
     }
+  } else {
+    var error = '<p>There were no results matching the query.</p>' +
+    '<p>The page <strong>"' + input.value + '"</strong> does not exist.  ' +
+    'You can <a href="tps://en.wikipedia.org/wiki/Wikipedia:Articles_for_creation" target="_blank">' +
+    'ask for it to be created.</a></p>';
+    $('#results-container').append('<div class="error">' + error + '</div>');
   }
-
 }
